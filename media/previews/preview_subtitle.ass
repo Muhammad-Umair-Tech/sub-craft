@@ -1,0 +1,7 @@
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, BackColour, BorderStyle, Outline, Shadow, Alignment
+Style: Default,Verdana,19,&H001e1ee9&,&H00ab833c&,3,1,1,2
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0, 00:00:00.00, 00:00:03.00, Default,,0,0,0,, This is what the subtitle will look like.
