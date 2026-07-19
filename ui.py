@@ -435,5 +435,4 @@ with gr.Blocks() as demo:
         outputs=preview_video_field,
     )
 
-# demo.launch(theme=gr.Theme.from_hub("JohnSmith9982/small_and_pretty"))
-demo.launch()
+demo.launch(theme=gr.Theme.from_hub("JohnSmith9982/small_and_pretty"))
