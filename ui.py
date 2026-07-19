@@ -165,13 +165,10 @@ def enable_button():
     return gr.update(interactive=True)
 
 
-def toggle_clear_button_interactivity(video_path):
-    if video_path is None:
-        return gr.update(interactive=False)
-    if os.path.exists(video_path):
-        return gr.update(interactive=True)
-    else:
-        return gr.update(interactive=False)
+def toggle_button_interactivity(video_path):
+    if video_path is None or not os.path.exists(video_path):
+        return gr.update(interactive=False), gr.update(interactive=False)
+    return gr.update(interactive=True), gr.update(interactive=True)
 
 
 def generate_preview_subtitle(
@@ -413,11 +410,13 @@ with gr.Blocks() as demo:
     )
 
     video_field.upload(
-        fn=check_uploaded_video_size, inputs=video_field, outputs=video_field
-    )
+        fn=check_uploaded_video_size, inputs=video_field, outputs=None
+    ).then(fn=enable_button, inputs=None, outputs=add_subtitle_button)
 
     video_field.change(
-        fn=toggle_clear_button_interactivity, inputs=video_field, outputs=clear_button
+        fn=toggle_button_interactivity,
+        inputs=video_field,
+        outputs=[clear_button, add_subtitle_button],
     )
 
     preview_subtitle_button.click(
