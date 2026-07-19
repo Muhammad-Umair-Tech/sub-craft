@@ -2,7 +2,13 @@ import gradio as gr
 import os
 import subprocess
 
-from app import model, add_ass_subtitle, add_srt_subtitle, extract_audio, hex_to_abgr
+from backend import (
+    model,
+    add_ass_subtitle,
+    add_srt_subtitle,
+    extract_audio,
+    hex_to_abgr,
+)
 
 
 def toggle_subtitle_options(choice):
@@ -429,5 +435,5 @@ with gr.Blocks() as demo:
         outputs=preview_video_field,
     )
 
-demo.launch(theme=gr.Theme.from_hub("JohnSmith9982/small_and_pretty"))
-# demo.launch()
+# demo.launch(theme=gr.Theme.from_hub("JohnSmith9982/small_and_pretty"))
+demo.launch()
