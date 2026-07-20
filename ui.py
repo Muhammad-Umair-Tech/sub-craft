@@ -149,12 +149,19 @@ def download_subtitle_file(sub_choice):
 
 
 def check_uploaded_video_size(video_path):
+    output_video_path = video_path
+    button_interactivity = gr.update(interactive=True)
     if not os.path.exists(video_path):
+        output_video_path = None
+        button_interactivity = gr.update(interactive=False)
         raise gr.Error("No video found. Please upload a video.")
     size_in_bytes = os.path.getsize(video_path)
     size_in_mbs = size_in_bytes / (1024 * 1024)
     if size_in_mbs > 25:
+        output_video_path = None
+        button_interactivity = gr.update(interactive=False)
         raise gr.Error("Video size greater than 25 MBs not supported.")
+    return output_video_path, button_interactivity
 
 
 def disable_button():
@@ -168,6 +175,11 @@ def enable_button():
 def toggle_button_interactivity(video_path):
     if video_path is None or not os.path.exists(video_path):
         return gr.update(interactive=False), gr.update(interactive=False)
+
+    size_in_mbs = os.path.getsize(video_path) / (1024 * 1024)
+    if size_in_mbs > 25:
+        return gr.update(interactive=True), gr.update(interactive=False)
+
     return gr.update(interactive=True), gr.update(interactive=True)
 
 
@@ -410,8 +422,10 @@ with gr.Blocks() as demo:
     )
 
     video_field.upload(
-        fn=check_uploaded_video_size, inputs=video_field, outputs=None
-    ).then(fn=enable_button, inputs=None, outputs=add_subtitle_button)
+        fn=check_uploaded_video_size,
+        inputs=video_field,
+        outputs=[video_field, add_subtitle_button],
+    )
 
     video_field.change(
         fn=toggle_button_interactivity,
