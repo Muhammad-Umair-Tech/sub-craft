@@ -50,8 +50,12 @@ def add_captions_helper(
     shadow,
     alignment,
 ):
-    if video_path is None:
-        return
+    if video_path is None or not os.path.exists(video_path):
+        return None
+
+    size_in_mbs = os.path.getsize(video_path) / (1024 * 1024)
+    if size_in_mbs > 25:
+        raise gr.Error("Cannot generate subtitles: Video exceeds 25 MBs limit.")
 
     output_video_path = ""
 
@@ -149,19 +153,14 @@ def download_subtitle_file(sub_choice):
 
 
 def check_uploaded_video_size(video_path):
-    output_video_path = video_path
-    button_interactivity = gr.update(interactive=True)
-    if not os.path.exists(video_path):
-        output_video_path = None
-        button_interactivity = gr.update(interactive=False)
+    if not video_path or not os.path.exists(video_path):
         raise gr.Error("No video found. Please upload a video.")
-    size_in_bytes = os.path.getsize(video_path)
-    size_in_mbs = size_in_bytes / (1024 * 1024)
+
+    size_in_mbs = os.path.getsize(video_path) / (1024 * 1024)
     if size_in_mbs > 25:
-        output_video_path = None
-        button_interactivity = gr.update(interactive=False)
         raise gr.Error("Video size greater than 25 MBs not supported.")
-    return output_video_path, button_interactivity
+
+    return video_path, gr.update(interactive=True)
 
 
 def disable_button():
@@ -424,7 +423,7 @@ with gr.Blocks() as demo:
     video_field.upload(
         fn=check_uploaded_video_size,
         inputs=video_field,
-        outputs=[video_field, add_subtitle_button],
+        outputs=None,
     )
 
     video_field.change(
