@@ -153,14 +153,17 @@ def download_subtitle_file(sub_choice):
 
 
 def check_uploaded_video_size(video_path):
+    output_video_path = video_path
     if not video_path or not os.path.exists(video_path):
+        output_video_path = None
         raise gr.Error("No video found. Please upload a video.")
 
     size_in_mbs = os.path.getsize(video_path) / (1024 * 1024)
     if size_in_mbs > 25:
+        output_video_path = None
         raise gr.Error("Video size greater than 25 MBs not supported.")
 
-    return video_path, gr.update(interactive=True)
+    return output_video_path
 
 
 def disable_button():
@@ -423,7 +426,7 @@ with gr.Blocks() as demo:
     video_field.upload(
         fn=check_uploaded_video_size,
         inputs=video_field,
-        outputs=None,
+        outputs=video_field,
     )
 
     video_field.change(
