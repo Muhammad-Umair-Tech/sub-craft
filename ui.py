@@ -247,8 +247,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 
 # gr.Blocks() acts as a low-level layout engine that allows you to web-design using Python.
-with gr.Blocks() as demo:
-    gr.Markdown("<h1 align='center'>Video Captioner</h1>")
+with gr.Blocks(title="SubCraft") as demo:
+    gr.Markdown("<h1 align='center'>SubCraft</h1>")
 
     with gr.Row():
 
